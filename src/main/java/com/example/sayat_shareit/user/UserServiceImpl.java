@@ -1,6 +1,8 @@
 package com.example.sayat_shareit.user;
 
+import com.example.sayat_shareit.exception.ConflictException;
 import com.example.sayat_shareit.user.dto.UserMapper;
+import com.example.sayat_shareit.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
-        Optional<User> optional = userRepository.finsByEmail(user.getEmail());
+        Optional<User> optional = userRepository.findByEmail(user.getEmail());
         if (optional.isPresent()) {
             throw new RuntimeException("Пользователь с такой почтой уже существует");
         }
@@ -24,6 +26,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User updatedUser, int id) {
+        Optional<User> optionalEmail = userRepository.findByEmail(updatedUser.getEmail());
+
+        if (optionalEmail.isPresent()) {
+            User foundUserByEmail = optionalEmail.get();
+            if (foundUserByEmail.getId() != id) {
+                throw new ConflictException("Пользователь с такой почтой уже существует");
+            }
+        }
         User existingUser = findById(id);
         userMapper.merge(existingUser, updatedUser);
         return userRepository.update(existingUser, id);
@@ -31,16 +41,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(int id) {
-        return null;
+        return userRepository.findById(id)
+                .orElseThrow(()-> new NotFoundException("Пользователь с таким ID не найден"));
     }
 
     @Override
     public void deleteById(int id) {
-
+        userRepository.deleteById(id);
     }
 
     @Override
     public List<User> findAll() {
-        return List.of();
+        return userRepository.findAll();
     }
 }

@@ -21,17 +21,19 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User update(User user, int id) {
-        return null;
+        users.put(id, user);
+        return user;
     }
 
     @Override
     public Optional<User> findById(int id) {
-        return Optional.empty();
+        User user = users.get(id);
+        return Optional.ofNullable(user);
     }
 
     @Override
     public void deleteById(int id) {
-
+        users.remove(id);
     }
 
     @Override
@@ -40,7 +42,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> finsByEmail(String email) {
-        return Optional.empty();
+    public Optional<User> findByEmail(String email) {
+        return users.values().stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst();
     }
 }

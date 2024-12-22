@@ -1,10 +1,10 @@
 package com.example.sayat_shareit.item;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 public class Item {
     private int id;
     private String name;

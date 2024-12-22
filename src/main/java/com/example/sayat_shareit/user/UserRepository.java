@@ -14,5 +14,5 @@ public interface UserRepository {
 
     List<User> findAll();
 
-    Optional<User> finsByEmail(String email);
+    Optional<User> findByEmail(String email);
 }

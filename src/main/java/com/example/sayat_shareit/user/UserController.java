@@ -3,6 +3,8 @@ package com.example.sayat_shareit.user;
 import com.example.sayat_shareit.user.dto.UserCreateDto;
 import com.example.sayat_shareit.user.dto.UserMapper;
 import com.example.sayat_shareit.user.dto.UserResponseDto;
+import com.example.sayat_shareit.user.dto.UserUpdateDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +18,16 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping
-    public UserResponseDto create(@RequestBody UserCreateDto userCreate) {
+    public UserResponseDto create(@Valid @RequestBody UserCreateDto userCreate) {
         User user = userMapper.fromCreate(userCreate);
         return userMapper.toResponse(userService.create(user));
     }
 
-    //@PatchMapping
+    @PatchMapping("/{id}")
+    public UserResponseDto update(@Valid @RequestBody UserUpdateDto userUpdate, @PathVariable int id) {
+        User user = userMapper.fromUpdate(userUpdate);
+        return userMapper.toResponse(userService.update(user, id));
+    }
 
     @GetMapping("/{id}")
     public UserResponseDto findById(@PathVariable int id) {
@@ -32,4 +38,10 @@ public class UserController {
     public List<UserResponseDto> findAll() {
         return userMapper.toResponse(userService.findAll());
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable int id) {
+        userService.deleteById(id);
+    }
+
 }
