@@ -1,13 +1,11 @@
-package com.example.sayat_shareit.item;
+package com.example.sayat_shareit.item.dto;
 
-import com.example.sayat_shareit.user.User;
 import lombok.Data;
 
 @Data
-public class Item {
+public class ItemResponseDto {
     private int id;
     private String name;
     private String description;
     private Boolean available;
-    private User owner;
 }
