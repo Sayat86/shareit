@@ -12,4 +12,6 @@ public interface ItemService {
     void deleteById(int itemId);
 
     List<Item> findAllByOwnerId(int ownerId);
+
+    List<Item> search(String text);
 }

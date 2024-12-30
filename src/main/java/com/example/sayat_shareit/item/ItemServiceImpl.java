@@ -8,6 +8,7 @@ import com.example.sayat_shareit.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -51,5 +52,13 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<Item> findAllByOwnerId(int ownerId) {
         return itemRepository.findByOwnerId(ownerId);
+    }
+
+    @Override
+    public List<Item> search(String text) {
+        if (text.isBlank()) {
+            return Collections.emptyList();
+        }
+        return itemRepository.search(text);
     }
 }

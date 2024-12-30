@@ -15,4 +15,6 @@ public interface ItemRepository {
     List<Item> findAll();
 
     List<Item> findByOwnerId(int ownerId);
+
+    List<Item> search(String text);
 }

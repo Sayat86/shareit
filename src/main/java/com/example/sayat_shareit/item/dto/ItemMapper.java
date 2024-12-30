@@ -1,7 +1,6 @@
 package com.example.sayat_shareit.item.dto;
 
 import com.example.sayat_shareit.item.Item;
-import com.example.sayat_shareit.user.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
