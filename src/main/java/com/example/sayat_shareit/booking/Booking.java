@@ -3,11 +3,13 @@ package com.example.sayat_shareit.booking;
 import com.example.sayat_shareit.item.Item;
 import com.example.sayat_shareit.user.User;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "bookings")
 public class Booking {
@@ -21,7 +23,8 @@ public class Booking {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    private int status;
+    @Enumerated
+    private BookingStatus status;
 
     @ManyToOne
     @JoinColumn(name = "item_id")
@@ -29,5 +32,5 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "booker_id")
-    private User user;
+    private User booker;
 }

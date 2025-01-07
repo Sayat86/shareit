@@ -1,13 +1,14 @@
-package com.example.sayat_shareit.comment;
+package com.example.sayat_shareit.item;
 
-import com.example.sayat_shareit.item.Item;
 import com.example.sayat_shareit.user.User;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -23,5 +24,5 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
-    private User user;
+    private User author;
 }

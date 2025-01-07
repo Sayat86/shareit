@@ -23,7 +23,7 @@ public class ItemServiceImpl implements ItemService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с таким ID не найден"));
         item.setOwner(user);
-        return itemRepository.create(item);
+        return itemRepository.save(item);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ItemServiceImpl implements ItemService {
             throw new ForbiddenException("Данный пользователь не является владельцем предмета");
         }
         itemMapper.merge(itemExisting, updateItem);
-        return itemRepository.update(itemExisting, itemId);
+        return itemRepository.save(itemExisting);
     }
 
     @Override

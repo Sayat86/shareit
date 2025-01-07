@@ -1,18 +1,11 @@
 package com.example.sayat_shareit.user;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository {
-    User create(User user);
-
-    User update(User user, int id);
-
-    Optional<User> findById(int id);
-
-    void deleteById(int id);
-
-    List<User> findAll();
+public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findByEmail(String email);
 }

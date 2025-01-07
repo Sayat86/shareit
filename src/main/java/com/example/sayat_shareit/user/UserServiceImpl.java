@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
         if (optional.isPresent()) {
             throw new RuntimeException("Пользователь с такой почтой уже существует");
         }
-        return userRepository.create(user);
+        return userRepository.save(user);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         }
         User existingUser = findById(id);
         userMapper.merge(existingUser, updatedUser);
-        return userRepository.update(existingUser, id);
+        return userRepository.save(existingUser);
     }
 
     @Override
