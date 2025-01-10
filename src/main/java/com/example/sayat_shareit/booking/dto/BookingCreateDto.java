@@ -3,15 +3,19 @@ package com.example.sayat_shareit.booking.dto;
 import com.example.sayat_shareit.booking.BookingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
 public class BookingCreateDto {
-    private LocalDateTime startDate;
+    private int itemId;
 
-    private LocalDateTime endDate;
+    @FutureOrPresent(message = "Дата бронирования не должна быть в прошлом")
+    private LocalDateTime start;
 
-    private BookingStatus status;
+    @Future(message = "Дата бонирования должна быть в будущем")
+    private LocalDateTime end;
 }

@@ -5,15 +5,13 @@ import com.example.sayat_shareit.item.Item;
 import java.util.List;
 
 public interface BookingService {
-    Booking create(Booking booking, int bookingId);
+    Booking create(Booking booking);
 
-    Booking update(Booking booking, int bookingId, int itemId);
+    Booking update(int bookingId, int userId, boolean approved);
 
     Booking findById(int id);
 
-    List<Booking> findAll();
+    List<Booking> findAllByBookerId(int bookerId);
 
-    List<Booking> findAllByItemId(int itemId);
-
-    List<Booking> searchOwner(String text);
+    List<Booking> findByItemOwnerId(int ownerId);
 }

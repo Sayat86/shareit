@@ -3,18 +3,11 @@ package com.example.sayat_shareit.booking;
 import com.example.sayat_shareit.booking.dto.BookingCreateDto;
 import com.example.sayat_shareit.booking.dto.BookingMapper;
 import com.example.sayat_shareit.booking.dto.BookingResponseDto;
-import com.example.sayat_shareit.booking.dto.BookingUpdateDto;
-import com.example.sayat_shareit.item.Item;
-import com.example.sayat_shareit.item.dto.ItemCreateDto;
-import com.example.sayat_shareit.item.dto.ItemResponseDto;
-import com.example.sayat_shareit.item.dto.ItemUpdateDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static com.example.sayat_shareit.utils.RequestConstants.USER_HEADER;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,18 +17,17 @@ public class BookingController {
     private final BookingMapper bookingMapper;
 
     @PostMapping
-    public BookingResponseDto create(@Valid @RequestBody BookingCreateDto bookingCreate,
-                                     @RequestHeader int bookingId) {
+    public BookingResponseDto create(@Valid @RequestBody BookingCreateDto bookingCreate) {
         Booking booking = bookingMapper.fromCreate(bookingCreate);
-        return bookingMapper.toResponseBooking(bookingService.create(booking, bookingId));
+        return bookingMapper.toResponseBooking(bookingService.create(booking));
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingResponseDto update(@RequestBody BookingUpdateDto bookingUpdate,
-                                     @PathVariable int bookingId,
-                                     @RequestHeader int itemId) {
+    public BookingResponseDto update(@PathVariable int bookingId,
+                                     @RequestHeader int userId,
+                                     @RequestHeader boolean approved) {
         Booking booking = bookingMapper.fromUpdate(bookingUpdate);
-        return bookingMapper.toResponseBooking(bookingService.update(booking, bookingId, itemId));
+        return bookingMapper.toResponseBooking(bookingService.update(bookingId, userId, approved));
     }
 
     @GetMapping("/{bookingId}")
@@ -44,12 +36,12 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingResponseDto> findAllByItemId(@RequestHeader int itemId) {
-        return bookingMapper.toResponseBooking(bookingService.findAllByItemId(itemId));
+    public List<BookingResponseDto> findAllByBookerId(@RequestHeader int bookerId) {
+        return bookingMapper.toResponseBooking(bookingService.findAllByBookerId(bookerId));
     }
 
     @GetMapping("/owner")
-    public List<BookingResponseDto> searchOwner(@RequestParam String text) {
-        return bookingMapper.toResponseBooking(bookingService.searchOwner(text));
+    public List<BookingResponseDto> findByItemOwnerId(@RequestParam int ownerId) {
+        return bookingMapper.toResponseBooking(bookingService.findByItemOwnerId(ownerId));
     }
 }
