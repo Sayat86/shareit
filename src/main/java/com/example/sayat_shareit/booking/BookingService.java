@@ -5,7 +5,7 @@ import com.example.sayat_shareit.item.Item;
 import java.util.List;
 
 public interface BookingService {
-    Booking create(Booking booking);
+    Booking create(Booking booking, int bookerId);
 
     Booking update(int bookingId, int userId, boolean approved);
 

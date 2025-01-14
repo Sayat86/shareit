@@ -1,9 +1,6 @@
 package com.example.sayat_shareit.item;
 
-import com.example.sayat_shareit.item.dto.ItemCreateDto;
-import com.example.sayat_shareit.item.dto.ItemMapper;
-import com.example.sayat_shareit.item.dto.ItemResponseDto;
-import com.example.sayat_shareit.item.dto.ItemUpdateDto;
+import com.example.sayat_shareit.item.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +15,8 @@ import static com.example.sayat_shareit.utils.RequestConstants.USER_HEADER;
 public class ItemController {
     private final ItemService itemService;
     private final ItemMapper itemMapper;
+    private final CommentMapper commentMapper;
+    private final CommentService commentService;
 
     @PostMapping
     public ItemResponseDto create(@Valid @RequestBody ItemCreateDto itemCreate,
@@ -47,5 +46,13 @@ public class ItemController {
     @GetMapping("/search")
     public List<ItemResponseDto> search(@RequestParam String text) {
         return itemMapper.toResponse(itemService.search(text));
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentResponseDto createComment(@RequestBody CommentCreateDto commentCreate,
+                                            @PathVariable int itemId,
+                                            @RequestHeader(USER_HEADER) int userId) {
+        Comment comment = commentMapper.fromCreate(commentCreate);
+        return commentMapper.toResponse(commentService.create(comment, itemId, userId));
     }
 }

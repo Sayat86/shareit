@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.sayat_shareit.utils.RequestConstants.USER_HEADER;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/bookings")
@@ -17,16 +19,17 @@ public class BookingController {
     private final BookingMapper bookingMapper;
 
     @PostMapping
-    public BookingResponseDto create(@Valid @RequestBody BookingCreateDto bookingCreate) {
+    public BookingResponseDto create(@Valid @RequestBody BookingCreateDto bookingCreate,
+                                     @RequestHeader(USER_HEADER) int bookerId) {
         Booking booking = bookingMapper.fromCreate(bookingCreate);
-        return bookingMapper.toResponseBooking(bookingService.create(booking));
+        return bookingMapper.toResponseBooking(bookingService.create(booking, bookerId));
     }
 
     @PatchMapping("/{bookingId}")
     public BookingResponseDto update(@PathVariable int bookingId,
-                                     @RequestHeader int userId,
-                                     @RequestHeader boolean approved) {
-        Booking booking = bookingMapper.fromUpdate(bookingUpdate);
+                                     @RequestHeader(USER_HEADER) int userId,
+                                     @RequestParam boolean approved) {
+//        Booking booking = bookingMapper.fromUpdate(bookingUpdate);
         return bookingMapper.toResponseBooking(bookingService.update(bookingId, userId, approved));
     }
 
@@ -36,12 +39,12 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingResponseDto> findAllByBookerId(@RequestHeader int bookerId) {
+    public List<BookingResponseDto> findAllByBookerId(@RequestHeader(USER_HEADER) int bookerId) {
         return bookingMapper.toResponseBooking(bookingService.findAllByBookerId(bookerId));
     }
 
     @GetMapping("/owner")
-    public List<BookingResponseDto> findByItemOwnerId(@RequestParam int ownerId) {
+    public List<BookingResponseDto> findByItemOwnerId(@RequestHeader(USER_HEADER) int ownerId) {
         return bookingMapper.toResponseBooking(bookingService.findByItemOwnerId(ownerId));
     }
 }

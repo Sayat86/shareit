@@ -1,6 +1,7 @@
 package com.example.sayat_shareit.booking;
 
 import com.example.sayat_shareit.booking.dto.BookingMapper;
+import com.example.sayat_shareit.exception.BadRequestException;
 import com.example.sayat_shareit.exception.ForbiddenException;
 import com.example.sayat_shareit.exception.NotFoundException;
 import com.example.sayat_shareit.item.Item;
@@ -18,26 +19,32 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
-    private final BookingMapper bookingMapper;
 
     @Override
-    public Booking create(Booking booking) {
+    public Booking create(Booking booking, int bookerId) {
+        User user = userRepository.findById(bookerId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с таким ID не найден"));
         Item item = itemRepository.findById(booking.getItem().getId())
                 .orElseThrow(() -> new NotFoundException("Вещь с таким ID не найдена"));
+        if (!item.getAvailable()) {
+            throw new BadRequestException("Предмет не доступен для бронирования");
+        }
         booking.setItem(item);
+        booking.setBooker(user);
+        booking.setStatus(BookingStatus.WAITING);
         return bookingRepository.save(booking);
     }
 
     @Override
     public Booking update(int bookingId, int userId, boolean approved) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         Booking bookingExisting = findById(bookingId);
         Item item = bookingExisting.getItem();
         if (item.getOwner().getId() != userId) {
             throw new ForbiddenException("Пользователь с ID = " + userId +
                     " не является владельцем предмета с ID " + item.getId());
         }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         if (approved) {
             bookingExisting.setStatus(BookingStatus.APPROVED);
         }
