@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     public User create(User user) {
         Optional<User> optional = userRepository.findByEmail(user.getEmail());
         if (optional.isPresent()) {
-            throw new RuntimeException("Пользователь с такой почтой уже существует");
+            throw new ConflictException("Пользователь с такой почтой уже существует");
         }
         return userRepository.save(user);
     }
