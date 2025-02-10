@@ -5,13 +5,21 @@ create table users
     email varchar(255) not null
 );
 
+create table item_requests
+(
+    id serial primary key,
+    description varchar(255) not null,
+    requestor_id int references users (id) not null
+);
+
 create table items
 (
     id          serial primary key,
     name        varchar(255)              not null,
     description varchar(1000)             not null,
     available   boolean                   not null,
-    owner_id    int references users (id) not null
+    owner_id    int references users (id) not null,
+    item_request_id int references item_requests (id)
 );
 
 create table bookings

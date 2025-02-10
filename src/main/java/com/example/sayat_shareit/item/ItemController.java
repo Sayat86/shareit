@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.sayat_shareit.utils.RequestConstants.USER_HEADER;
+import static com.example.sayat_shareit.utils.RequestConstants.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,13 +39,19 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemResponseDto> findAllByOwnerId(@RequestHeader(USER_HEADER) int userId) {
-        return itemMapper.toResponse(itemService.findAllByOwnerId(userId));
+    public List<ItemResponseDto> findAllByOwnerId(@RequestHeader(USER_HEADER) int userId,
+                                                  @RequestParam(defaultValue = DEFAULT_FROM) int from,
+                                                  @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
+        int page = from / size;
+        return itemMapper.toResponse(itemService.findAllByOwnerId(userId, page, size));
     }
 
     @GetMapping("/search")
-    public List<ItemResponseDto> search(@RequestParam String text) {
-        return itemMapper.toResponse(itemService.search(text));
+    public List<ItemResponseDto> search(@RequestParam String text,
+                                        @RequestParam(defaultValue = DEFAULT_FROM) int from,
+                                        @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
+        int page = from / size;
+        return itemMapper.toResponse(itemService.search(text, page, size));
     }
 
     @PostMapping("/{itemId}/comment")

@@ -1,6 +1,7 @@
 package com.example.sayat_shareit.item;
 
 import com.example.sayat_shareit.booking.Booking;
+import com.example.sayat_shareit.item_request.ItemRequest;
 import com.example.sayat_shareit.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -30,4 +31,8 @@ public class Item {
 
     @OneToMany(mappedBy = "item")
     private List<Comment> comments;
+
+    @ManyToOne
+    @JoinColumn(name = "item_request_id")
+    private ItemRequest request;
 }

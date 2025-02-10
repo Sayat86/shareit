@@ -13,8 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,5 +63,107 @@ public class UserControllerIT {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value("Mo"))
                 .andExpect(jsonPath("$.email").value("mo@mail.ru"));
+    }
+
+    @Test
+    @SneakyThrows
+    void updateName() {
+        UserCreateDto userCreateDto = new UserCreateDto();
+        userCreateDto.setName("Bob");
+        userCreateDto.setEmail("bob@mail.ru");
+
+        String json = objectMapper.writeValueAsString(userCreateDto);
+
+        String responseJson = mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").value("Bob"))
+                .andExpect(jsonPath("$.email").value("bob@mail.ru"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        int id = objectMapper.readValue(responseJson, UserResponseDto.class)
+                .getId();
+
+        UserUpdateDto userUpdateDto = new UserUpdateDto();
+        userUpdateDto.setName("Mo");
+
+        String jsonUpdate = objectMapper.writeValueAsString(userUpdateDto);
+
+        mockMvc.perform(patch("/users/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonUpdate))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.name").value("Mo"))
+                .andExpect(jsonPath("$.email").value("bob@mail.ru"));
+    }
+
+    @Test
+    @SneakyThrows
+    void updateEmail() {
+        UserCreateDto userCreateDto = new UserCreateDto();
+        userCreateDto.setName("Bob");
+        userCreateDto.setEmail("bob@mail.ru");
+
+        String json = objectMapper.writeValueAsString(userCreateDto);
+
+        String responseJson = mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").value("Bob"))
+                .andExpect(jsonPath("$.email").value("bob@mail.ru"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        int id = objectMapper.readValue(responseJson, UserResponseDto.class)
+                .getId();
+
+        UserUpdateDto userUpdateDto = new UserUpdateDto();
+        userUpdateDto.setEmail("mo@mail.ru");
+
+        String jsonUpdate = objectMapper.writeValueAsString(userUpdateDto);
+
+        mockMvc.perform(patch("/users/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonUpdate))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.name").value("Bob"))
+                .andExpect(jsonPath("$.email").value("mo@mail.ru"));
+    }
+
+    @Test
+    @SneakyThrows
+    void deleteByIdTest() {
+        UserCreateDto userCreateDto = new UserCreateDto();
+        userCreateDto.setName("Bob");
+        userCreateDto.setEmail("bob@mail.ru");
+
+        String json = objectMapper.writeValueAsString(userCreateDto);
+
+        String responseJson = mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").value("Bob"))
+                .andExpect(jsonPath("$.email").value("bob@mail.ru"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        int id = objectMapper.readValue(responseJson, UserResponseDto.class)
+                .getId();
+
+        mockMvc.perform(delete("/users/" + id))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/users/" + id))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Пользователь с таким ID не найден"));
     }
 }

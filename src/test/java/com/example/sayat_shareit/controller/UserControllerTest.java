@@ -5,6 +5,7 @@ import com.example.sayat_shareit.user.UserController;
 import com.example.sayat_shareit.user.UserService;
 import com.example.sayat_shareit.user.dto.UserCreateDto;
 import com.example.sayat_shareit.user.dto.UserMapper;
+import com.example.sayat_shareit.user.dto.UserUpdateDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
@@ -108,4 +109,6 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.name").value("Bob"))
                 .andExpect(jsonPath("$.email").value("bob@mail.ru"));
     }
+
+    // TODO: протестировать валидацию @NotBlank, @Email
 }
