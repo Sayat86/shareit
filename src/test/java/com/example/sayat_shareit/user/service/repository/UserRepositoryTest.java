@@ -1,4 +1,4 @@
-package com.example.sayat_shareit.repository;
+package com.example.sayat_shareit.user.service.repository;
 
 import com.example.sayat_shareit.user.User;
 import com.example.sayat_shareit.user.UserRepository;

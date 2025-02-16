@@ -9,6 +9,7 @@ import com.example.sayat_shareit.item.ItemRepository;
 import com.example.sayat_shareit.user.User;
 import com.example.sayat_shareit.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,14 +62,16 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> findAllByBookerId(int bookerId) {
-        return bookingRepository.findByBookerId(bookerId);
+    public List<Booking> findAllByBookerId(int bookerId, int page, int size) {
+        return bookingRepository.findByBookerId(bookerId, PageRequest.of(page, size))
+                .getContent();
     }
 
     @Override
-    public List<Booking> findByItemOwnerId(int ownerId) {
+    public List<Booking> findByItemOwnerId(int ownerId, int page, int size) {
         userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
-        return bookingRepository.findByItemOwnerId(ownerId);
+        return bookingRepository.findByItemOwnerId(ownerId, PageRequest.of(page, size))
+                .getContent();
     }
 }

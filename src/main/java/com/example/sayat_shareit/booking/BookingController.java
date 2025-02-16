@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.sayat_shareit.utils.RequestConstants.USER_HEADER;
+import static com.example.sayat_shareit.utils.RequestConstants.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,12 +39,18 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingResponseDto> findAllByBookerId(@RequestHeader(USER_HEADER) int bookerId) {
-        return bookingMapper.toResponseBooking(bookingService.findAllByBookerId(bookerId));
+    public List<BookingResponseDto> findAllByBookerId(@RequestHeader(USER_HEADER) int bookerId,
+                                                      @RequestParam(defaultValue = DEFAULT_FROM) int from,
+                                                      @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
+        int page = from / size;
+        return bookingMapper.toResponseBooking(bookingService.findAllByBookerId(bookerId, page, size));
     }
 
     @GetMapping("/owner")
-    public List<BookingResponseDto> findByItemOwnerId(@RequestHeader(USER_HEADER) int ownerId) {
-        return bookingMapper.toResponseBooking(bookingService.findByItemOwnerId(ownerId));
+    public List<BookingResponseDto> findByItemOwnerId(@RequestHeader(USER_HEADER) int ownerId,
+                                                      @RequestParam(defaultValue = DEFAULT_FROM) int from,
+                                                      @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
+        int page = from / size;
+        return bookingMapper.toResponseBooking(bookingService.findByItemOwnerId(ownerId, page, size));
     }
 }

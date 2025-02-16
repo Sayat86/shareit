@@ -1,4 +1,4 @@
-package com.example.sayat_shareit.controller;
+package com.example.sayat_shareit.user.service.controller;
 
 import com.example.sayat_shareit.user.User;
 import com.example.sayat_shareit.user.UserController;

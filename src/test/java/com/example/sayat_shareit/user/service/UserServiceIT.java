@@ -1,4 +1,4 @@
-package com.example.sayat_shareit.service;
+package com.example.sayat_shareit.user.service;
 
 import com.example.sayat_shareit.exception.NotFoundException;
 import com.example.sayat_shareit.user.User;
