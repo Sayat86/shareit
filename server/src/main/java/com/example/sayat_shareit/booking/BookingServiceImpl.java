@@ -23,6 +23,10 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking create(Booking booking, int bookerId) {
+        if (!booking.getEndDate().isAfter(booking.getStartDate())) {
+            throw new BadRequestException("Дата окончания должна быть после даты начала бронирования");
+        }
+
         User user = userRepository.findById(bookerId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с таким ID не найден"));
         Item item = itemRepository.findById(booking.getItem().getId())
@@ -63,6 +67,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<Booking> findAllByBookerId(int bookerId, int page, int size) {
+
         return bookingRepository.findByBookerId(bookerId, PageRequest.of(page, size))
                 .getContent();
     }

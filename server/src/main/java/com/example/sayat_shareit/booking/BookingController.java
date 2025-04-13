@@ -19,7 +19,7 @@ public class BookingController {
     private final BookingMapper bookingMapper;
 
     @PostMapping
-    public BookingResponseDto create(@Valid @RequestBody BookingCreateDto bookingCreate,
+    public BookingResponseDto create(@RequestBody BookingCreateDto bookingCreate,
                                      @RequestHeader(USER_HEADER) int bookerId) {
         Booking booking = bookingMapper.fromCreate(bookingCreate);
         return bookingMapper.toResponseBooking(bookingService.create(booking, bookerId));
@@ -29,6 +29,7 @@ public class BookingController {
     public BookingResponseDto update(@PathVariable int bookingId,
                                      @RequestHeader(USER_HEADER) int userId,
                                      @RequestParam boolean approved) {
+//        Booking booking = bookingMapper.fromUpdate(bookingUpdate);
         return bookingMapper.toResponseBooking(bookingService.update(bookingId, userId, approved));
     }
 

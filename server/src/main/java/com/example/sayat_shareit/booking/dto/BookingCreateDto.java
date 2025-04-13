@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -13,9 +14,11 @@ import java.time.LocalDateTime;
 public class BookingCreateDto {
     private int itemId;
 
+    @NotNull
     @FutureOrPresent(message = "Дата бронирования не должна быть в прошлом")
     private LocalDateTime start;
 
+    @NotNull
     @Future(message = "Дата бонирования должна быть в будущем")
     private LocalDateTime end;
 }
