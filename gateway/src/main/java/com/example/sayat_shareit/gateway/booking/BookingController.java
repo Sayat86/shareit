@@ -17,8 +17,9 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<Object> findAll(@RequestHeader(USER_HEADER) int bookerId,
                                           @RequestParam(defaultValue = DEFAULT_FROM) int from,
-                                          @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
-        return bookingClient.findAll(bookerId, from, size);
+                                          @RequestParam(defaultValue = DEFAULT_SIZE) int size,
+                                          @RequestParam(defaultValue = "ALL") String state) {
+        return bookingClient.findAll(bookerId, from, size, state);
     }
 
     @GetMapping("/{id}")
@@ -42,7 +43,8 @@ public class BookingController {
     @GetMapping("/owner")
     public ResponseEntity<Object> findByItemOwnerId (@RequestHeader(USER_HEADER) int ownerId,
                                                      @RequestParam(defaultValue = DEFAULT_FROM) int from,
-                                                     @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
-        return bookingClient.findByItemOwnerId(ownerId, from, size);
+                                                     @RequestParam(defaultValue = DEFAULT_SIZE) int size,
+                                                     @RequestParam(defaultValue = "ALL") String state) {
+        return bookingClient.findByItemOwnerId(ownerId, from, size, state);
     }
 }

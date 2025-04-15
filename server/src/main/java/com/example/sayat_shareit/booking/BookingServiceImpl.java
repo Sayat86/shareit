@@ -10,8 +10,10 @@ import com.example.sayat_shareit.user.User;
 import com.example.sayat_shareit.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -66,17 +68,60 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> findAllByBookerId(int bookerId, int page, int size) {
-
-        return bookingRepository.findByBookerId(bookerId, PageRequest.of(page, size))
-                .getContent();
+    public List<Booking> findAllByBookerId(int bookerId, int page, int size, BookingState state) {
+        userRepository.findById(bookerId)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+        Pageable pageable = PageRequest.of(page, size);
+        switch (state) {
+            case PAST -> {
+                return bookingRepository.findAllByBooker_IdAndEndDateBeforeOrderByStartDateDesc(bookerId, LocalDateTime.now(), pageable);
+            }
+            case FUTURE -> {
+                return bookingRepository.findAllByBooker_IdAndStartDateAfterOrderByStartDateDesc(bookerId, LocalDateTime.now(), pageable);
+            }
+            case CURRENT -> {
+                return bookingRepository.findAllByBooker_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(
+                        bookerId, LocalDateTime.now(), LocalDateTime.now(), pageable);
+            }
+            case WAITING -> {
+                return bookingRepository.findAllByBooker_IdAndStatusOrderByStartDateDesc(bookerId, BookingStatus.WAITING, pageable);
+            }
+            case REJECTED -> {
+                return bookingRepository.findAllByBooker_IdAndStatusOrderByStartDateDesc(bookerId, BookingStatus.REJECTED, pageable);
+            }
+            default -> { // ALL
+                return bookingRepository.findAllByBooker_IdOrderByStartDateDesc(bookerId, pageable);
+            }
+        }
     }
 
     @Override
-    public List<Booking> findByItemOwnerId(int ownerId, int page, int size) {
+    public List<Booking> findByItemOwnerId(int ownerId, int page, int size, BookingState state) {
         userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
-        return bookingRepository.findByItemOwnerId(ownerId, PageRequest.of(page, size))
-                .getContent();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        switch (state) {
+            case PAST -> {
+                return bookingRepository.findAllByItem_Owner_IdAndEndDateBeforeOrderByStartDateDesc(ownerId, LocalDateTime.now(), pageable);
+            }
+            case FUTURE -> {
+                return bookingRepository.findAllByItem_Owner_IdAndStartDateAfterOrderByStartDateDesc(ownerId, LocalDateTime.now(), pageable);
+            }
+            case CURRENT -> {
+                return bookingRepository.findAllByItem_Owner_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(
+                        ownerId, LocalDateTime.now(), LocalDateTime.now(), pageable);
+            }
+            case WAITING -> {
+                return bookingRepository.findAllByItem_Owner_IdAndStatusOrderByStartDateDesc(ownerId, BookingStatus.WAITING, pageable);
+            }
+            case REJECTED -> {
+                return bookingRepository.findAllByItem_Owner_IdAndStatusOrderByStartDateDesc(ownerId, BookingStatus.REJECTED, pageable);
+            }
+            default -> { // ALL
+                return bookingRepository.findAllByItem_Owner_IdOrderByStartDateDesc(ownerId, pageable);
+            }
+        }
     }
 }

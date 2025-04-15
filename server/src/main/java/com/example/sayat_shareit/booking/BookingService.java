@@ -11,7 +11,7 @@ public interface BookingService {
 
     Booking findById(int id);
 
-    List<Booking> findAllByBookerId(int bookerId, int page, int size);
+    List<Booking> findAllByBookerId(int bookerId, int page, int size, BookingState state);
 
-    List<Booking> findByItemOwnerId(int ownerId, int page, int size);
+    List<Booking> findByItemOwnerId(int ownerId, int page, int size, BookingState state);
 }

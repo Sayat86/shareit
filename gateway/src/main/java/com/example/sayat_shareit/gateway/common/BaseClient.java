@@ -4,6 +4,7 @@ import io.micrometer.common.lang.Nullable;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
+import static com.example.sayat_shareit.utils.RequestConstants.USER_HEADER;
 
 import java.util.List;
 import java.util.Map;

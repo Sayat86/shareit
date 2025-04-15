@@ -19,10 +19,11 @@ public class BookingClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> findAll(int bookerId, int from, int size) {
+    public ResponseEntity<Object> findAll(int bookerId, int from, int size, String state) {
         Map<String, Object> params = Map.of("from", from,
-                "size", size);
-        return get("/bookings", bookerId, params);
+                "size", size,
+                "state", state);
+        return get("/bookings?from={from}&size={size}&state=${state}", bookerId, params);
     }
 
     public ResponseEntity<Object> findById(Long id) {
@@ -41,9 +42,10 @@ public class BookingClient extends BaseClient {
         return patch("/bookings/{bookingId}?approved={approved}", userId, vars, null);
     }
 
-    public ResponseEntity<Object> findByItemOwnerId(int ownerId, int from, int size) {
+    public ResponseEntity<Object> findByItemOwnerId(int ownerId, int from, int size, String state) {
         Map<String, Object> params = Map.of("from", from,
-                "size", size);
-        return get("/bookings", ownerId, params);
+                "size", size,
+                "state", state);
+        return get("/bookings/owner?from={from}&size={size}&state=${state}", ownerId, params);
     }
 }

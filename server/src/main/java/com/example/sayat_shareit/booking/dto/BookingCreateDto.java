@@ -21,4 +21,5 @@ public class BookingCreateDto {
     @NotNull
     @Future(message = "Дата бонирования должна быть в будущем")
     private LocalDateTime end;
+
 }
