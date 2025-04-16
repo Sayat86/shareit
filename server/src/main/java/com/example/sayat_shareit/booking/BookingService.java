@@ -9,7 +9,7 @@ public interface BookingService {
 
     Booking update(int bookingId, int userId, boolean approved);
 
-    Booking findById(int id);
+    Booking findById(int id, int userId);
 
     List<Booking> findAllByBookerId(int bookerId, int page, int size, BookingState state);
 

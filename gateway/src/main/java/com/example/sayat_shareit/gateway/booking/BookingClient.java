@@ -23,7 +23,7 @@ public class BookingClient extends BaseClient {
         Map<String, Object> params = Map.of("from", from,
                 "size", size,
                 "state", state);
-        return get("/bookings?from={from}&size={size}&state=${state}", bookerId, params);
+        return get("/bookings?from={from}&size={size}&state={state}", bookerId, params);
     }
 
     public ResponseEntity<Object> findById(Long id) {
@@ -46,6 +46,6 @@ public class BookingClient extends BaseClient {
         Map<String, Object> params = Map.of("from", from,
                 "size", size,
                 "state", state);
-        return get("/bookings/owner?from={from}&size={size}&state=${state}", ownerId, params);
+        return get("/bookings/owner?from={from}&size={size}&state={state}", ownerId, params);
     }
 }

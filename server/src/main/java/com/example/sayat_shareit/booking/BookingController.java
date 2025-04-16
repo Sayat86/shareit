@@ -35,8 +35,9 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
-    public BookingResponseDto findById(@PathVariable int bookingId) {
-        return bookingMapper.toResponseBooking(bookingService.findById(bookingId));
+    public BookingResponseDto findById(@PathVariable int bookingId,
+                                       @RequestHeader(USER_HEADER) int userId) {
+        return bookingMapper.toResponseBooking(bookingService.findById(bookingId, userId));
     }
 
     @GetMapping
