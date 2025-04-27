@@ -1,7 +1,6 @@
 package com.example.sayat_shareit.item;
 
 import com.example.sayat_shareit.item.dto.*;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

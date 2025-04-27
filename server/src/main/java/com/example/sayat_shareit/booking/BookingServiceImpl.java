@@ -44,7 +44,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking update(int bookingId, int userId, boolean approved) {
-        Booking bookingExisting = findById(bookingId);
+        Booking bookingExisting = findById(bookingId, userId);
         Item item = bookingExisting.getItem();
         if (item.getOwner().getId() != userId) {
             throw new ForbiddenException("Пользователь с ID = " + userId +
@@ -60,6 +60,7 @@ public class BookingServiceImpl implements BookingService {
         }
         return bookingRepository.save(bookingExisting);
     }
+
 
     @Override
     public Booking findById(int id, int userId) {
